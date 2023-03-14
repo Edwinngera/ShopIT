@@ -30,11 +30,11 @@ def create_app():
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
 
-    admin = Admin(app, name='Ecommerce Admin', template_mode='bootstrap3')
-    admin.add_view(ModelView(Product, db.session))
-    admin.add_view(ModelView(User, db.session))
-    admin.add_view(ModelView(Category, db.session))
-    admin.add_view(ModelView(ProductCategory, db.session))
+    # admin = Admin(app, name='Ecommerce Admin', template_mode='bootstrap3')
+    # admin.add_view(ModelView(Product, db.session))
+    # admin.add_view(ModelView(User, db.session))
+    # admin.add_view(ModelView(Category, db.session))
+    # admin.add_view(ModelView(ProductCategory, db.session))
 
     @login_manager.user_loader
     def load_user(userid):

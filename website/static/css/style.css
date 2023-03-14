@@ -14,7 +14,7 @@ p{
     color: #555;
 }
 .header{
-    background: radial-gradient(#fff,#ffd6d6);
+    background: radial-gradient(#fff,hsl(253, 100%, 92%));
 }
 
 .container{
@@ -498,8 +498,9 @@ th:last-child{
 
 .accout-page{
     padding: 50px 0;
-    background: radial-gradient(#fff,#ffd6d6);
+    background: radial-gradient(#fff,hsl(253, 100%, 92%));
 }
+
 
 .form-container{
     background: #fff;

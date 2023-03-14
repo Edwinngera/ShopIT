@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, flash,url_for,jsonify,Blueprint
+from flask import Flask, render_template, redirect, request, flash,url_for,jsonify,Blueprint,abort
 from werkzeug.security import generate_password_hash,check_password_hash
 from flask_login import login_required, current_user
 from .forms import uploadProduct
@@ -25,7 +25,7 @@ def products():
 
 @views.route('/account')
 def account():
-    return render_template('products.html')
+    return render_template('account.html')
 
 
 @views.route('/products_details', methods=['GET', 'POST'])
@@ -40,12 +40,12 @@ def cart():
 def admin_users():
     return render_template('adminUsers.html')
 
+# @views.route('/upload_products')
+# def upload_products():
+#     return render_template('upload.html')
+
+
 @views.route('/upload_products')
-def upload_products():
-    return render_template('upload.html')
-
-
-@views.route('/test')
 def test():
     form=uploadProduct()
     return render_template('admin/add_products.html', form=form)
@@ -80,14 +80,33 @@ def add_product():
         )
         db.session.add(product)
         db.session.commit()
-        return 'Product added successfully'
+        return redirect(url_for('views.view'))
+      
     return render_template('admin/add_products.html',form=form)
+
+@views.route("/delete/<int:productid>", methods=["GET","POST"])
+def delete_product(productid):
+    try:
+        product=Product.query.get(productid)
+        db.session.delete(product)
+        db.session.commit()
+        return jsonify({
+              'success': True,
+              'deleted': productid
+        })
+    
+    except Exception as e:
+        abort(422)
 
 
 @views.route('/view')
 def view(): 
     products=Product.query.all()
     return render_template('admin/view_products.html', products=products)
+
+@views.route('/admin/')
+def dashboard():
+    return render_template('admin/dashboard.html')
 
 
 

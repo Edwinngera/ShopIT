@@ -1,32 +1,48 @@
 {% extends "./admin/base.html" %}
 {% block content %}
-  <h1>Products</h1>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Product Name</th>
-        <th>Description</th>
-        <th>Image</th>
-        <th>Quantity</th>
-        <th>Regular Price</th>
-        <th>Discounted Price</th>
-        <th>Product Rating</th>
-        <th>Product Review</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for product in products %}
-        <tr>
-          <td>{{ product.product_name }}</td>
-          <td>{{ product.description }}</td>
-          <td><img src="{{ url_for('static', filename='/uploads/' + product.image) }}" alt="{{ product.product_name }}" height="100"></td>
-          <td>{{ product.quantity }}</td>
-          <td>{{ product.regular_price }}</td>
-          <td>{{ product.discounted_price }}</td>
-          <td>{{ product.product_rating }}</td>
-          <td>{{ product.product_review }}</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+  <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+  <a style="margin-top:  40px;" href="{{url_for('views.add_product')}}"
+    class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+      class="fas fa-download fa-sm text-white-50"></i> Add Products</a>
+</div>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Product Name</th>
+      <th>Description</th>
+      <th>Image</th>
+      <th>Quantity</th>
+      <th>Regular Price</th>
+      <th>Discounted Price</th>
+      <th>Product Rating</th>
+      <th>Product Review</th>
+      <th>Edit Product</th>
+      <th>Delete Product</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for product in products %}
+    <tr>
+      <td>{{ product.product_name }}</td>
+      <td>{{ product.description }}</td>
+      <td><img src="{{ url_for('static', filename='/uploads/' + product.image) }}" alt="{{ product.product_name }}"
+          height="100"></td>
+      <td>{{ product.quantity }}</td>
+      <td>{{ product.regular_price }}</td>
+      <td>{{ product.discounted_price }}</td>
+      <td>{{ product.product_rating }}</td>
+      <td>{{ product.product_review }}</td>
+      <td>
+        <a href="{{ url_for('views.delete_product', productid=product.productid) }}" class="btn btn-primary">Edit</a>
+      </td>
+      <td>
+        <a href="{{ url_for('views.delete_product', productid=product.productid) }}" class="btn btn-danger">Delete</a>
+      </td>
+    </tr>
+
+    {% endfor %}
+  </tbody>
+</table>
 {% endblock %}
