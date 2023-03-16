@@ -46,6 +46,8 @@ class Product(db.Model):
     product_rating = db.Column(db.DECIMAL)
     product_review = db.Column(db.String(100), nullable=True)
 
+    
+
     def __repr__(self):
         return f"Product('{self.productid}','{self.product_name}','{self.description}', '{self.image}',  '{self.quantity}', '{self.regular_price}', '{self.discounted_price}')"
 

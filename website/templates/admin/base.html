@@ -14,9 +14,13 @@
 
 <body>
     <div class="sidebar">
-        <a href="#contact">Admin</a>
-        <a class="active" href="#home">Dashboard</a>
-        <a href="{{url_for('views.view')}}">Products</a>
+        <div class="logo">
+            <a href="index.html"><img src="/static/images/new_logo.png" width="125px" height="125px"></a>
+        </div>
+        <a class="{% if request.path == url_for('views.dashboard') %}active{% endif %}"
+            href="{{url_for('views.dashboard')}}">Dashboard</a>
+        <a class=" {% if request.path == url_for('views.view') %}active{% endif %}"
+            href="{{url_for('views.view')}}">Products</a>
         <a href="#contact">Products Categories</a>
         <a href="#about">Orders</a>
         <a href="#about">Payments</a>

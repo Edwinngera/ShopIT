@@ -1,5 +1,5 @@
-from flask import Flask, render_template, redirect, request, flash,url_for,jsonify,Blueprint,abort
-from werkzeug.security import generate_password_hash,check_password_hash
+from flask import Flask, render_template, redirect, request, flash, url_for, jsonify, Blueprint, abort, session
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, current_user
 from .forms import uploadProduct
 import os
@@ -9,8 +9,7 @@ from . import db
 from . import create_app
 
 
-
-views=Blueprint('views',__name__)
+views = Blueprint('views', __name__)
 
 
 @views.route('/')
@@ -20,7 +19,11 @@ def home():
 
 @views.route('/products')
 def products():
-    return render_template('products.html')
+    page = request.args.get('page', 1, type=int)
+    print(page)
+    products = Product.query.paginate(page=page, per_page=3)
+    # products = Product.query.all()
+    return render_template('products.html', products=products)
 
 
 @views.route('/account')
@@ -32,9 +35,11 @@ def account():
 def products_details():
     return render_template('product-details.html')
 
+
 @views.route('/cart')
 def cart():
     return render_template('cart.html')
+
 
 @views.route('/admin_users')
 def admin_users():
@@ -47,26 +52,26 @@ def admin_users():
 
 @views.route('/upload_products')
 def test():
-    form=uploadProduct()
+    form = uploadProduct()
     return render_template('admin/add_products.html', form=form)
 
 
-@views.route('/add-product',methods=['POST','GET'])
+@views.route('/add-product', methods=['POST', 'GET'])
 def add_product():
-    app=create_app()
-    form=uploadProduct()
+    app = create_app()
+    form = uploadProduct()
     if request.method == 'POST':
-        product_name=request.form.get('product_name')
-        description=request.form.get('description')
-        image=request.files['image']
-        quantity=request.form.get('quantity')
+        product_name = request.form.get('product_name')
+        description = request.form.get('description')
+        image = request.files['image']
+        quantity = request.form.get('quantity')
         regular_price = request.form.get('regular_price')
         discounted_price = request.form.get('discounted_price')
         product_rating = request.form.get('product_rating')
         product_review = request.form.get('product_review')
 
-        #Save image to file system
-        filename=secure_filename(image.filename);
+        # Save image to file system
+        filename = secure_filename(image.filename)
         image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         product = Product(
             product_name=product_name,
@@ -81,34 +86,64 @@ def add_product():
         db.session.add(product)
         db.session.commit()
         return redirect(url_for('views.view'))
-      
-    return render_template('admin/add_products.html',form=form)
 
-@views.route("/delete/<int:productid>", methods=["GET","POST"])
+    return render_template('admin/add_products.html', form=form)
+
+
+@views.route("/delete/<int:productid>", methods=["GET", "POST"])
 def delete_product(productid):
     try:
-        product=Product.query.get(productid)
+        product = Product.query.get(productid)
         db.session.delete(product)
         db.session.commit()
         return jsonify({
-              'success': True,
-              'deleted': productid
+            'success': True,
+            'deleted': productid
         })
-    
+
     except Exception as e:
         abort(422)
 
+    return redirect()
+
+
+@views.route("/add_to_cart/<int:productid>")
+def add_to_cart(productid):
+    product = Product.query.get_or_404(productid)
+
+    cart_item = {
+        'id': product.productid,
+        'name': product.product_name,
+        'price': product.regular_price if product.discounted_price is None else product.discounted_price,
+        'quantity': 1
+    }
+
+    cart = session.get('cart', [])
+
+    for item in cart:
+        if item['id'] == cart_item['id']:
+            item['quantity'] += 1
+            break
+    else:
+        cart.append(cart_item)
+
+    session['cart'] = cart
+
+    flash('Item added to cart', 'success')
+
+    return redirect(url_for('views.cart'))
+
+    # retrieve the current cart from the session or create a new if it doesnt exist
+
+
+
 
 @views.route('/view')
-def view(): 
-    products=Product.query.all()
+def view():
+    products = Product.query.all()
     return render_template('admin/view_products.html', products=products)
+
 
 @views.route('/admin/')
 def dashboard():
     return render_template('admin/dashboard.html')
-
-
-
-
-
