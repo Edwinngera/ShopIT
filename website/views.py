@@ -14,16 +14,37 @@ views = Blueprint('views', __name__)
 
 @views.route('/')
 def home():
-    return render_template('index.html')
+    latest_products =Product.query.limit(6).all()
+    product=Product.query.all()
+    print("Edwin")
+    print(latest_products)
+    return render_template('index.html', latest_products=latest_products)
 
 
 @views.route('/products')
 def products():
     page = request.args.get('page', 1, type=int)
     print(page)
-    products = Product.query.paginate(page=page, per_page=3)
+    products = Product.query.paginate(page=page, per_page=5)
     # products = Product.query.all()
     return render_template('products.html', products=products)
+
+
+
+@views.route('/products_details/<int:productid>', methods=['GET', 'POST'])
+def products_details(productid):
+    product = Product.query.get(productid)
+    return render_template('product-details.html', product=product)
+
+
+
+@views.route('/cart')
+def cart():
+    cart=session.get('cart',[])
+    # total = sum(item['price'] * item['quantity'] for item in cart)
+
+    return render_template('cart.html')
+
 
 
 @views.route('/account')
@@ -31,14 +52,9 @@ def account():
     return render_template('account.html')
 
 
-@views.route('/products_details', methods=['GET', 'POST'])
-def products_details():
-    return render_template('product-details.html')
 
 
-@views.route('/cart')
-def cart():
-    return render_template('cart.html')
+
 
 
 @views.route('/admin_users')
@@ -115,7 +131,8 @@ def add_to_cart(productid):
         'id': product.productid,
         'name': product.product_name,
         'price': product.regular_price if product.discounted_price is None else product.discounted_price,
-        'quantity': 1
+        'quantity': 1,
+        'link': product.image
     }
 
     cart = session.get('cart', [])
@@ -128,6 +145,7 @@ def add_to_cart(productid):
         cart.append(cart_item)
 
     session['cart'] = cart
+
 
     flash('Item added to cart', 'success')
 
