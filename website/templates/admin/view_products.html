@@ -7,8 +7,9 @@
       class="fas fa-download fa-sm text-white-50"></i> Add Products</a>
 </div>
 
-<table class="table">
-  <thead>
+
+<table class="table table-striped table-dark table-responsive">
+  <thead class="thead-dark">
     <tr>
       <th>Product Name</th>
       <th>Description</th>
@@ -23,19 +24,19 @@
     </tr>
   </thead>
   <tbody>
-    {% for product in products %}
+    {% for product in products.items %}
     <tr>
       <td>{{ product.product_name }}</td>
       <td>{{ product.description }}</td>
       <td><img src="{{ url_for('static', filename='/uploads/' + product.image) }}" alt="{{ product.product_name }}"
-          height="100"></td>
+          height="50" width="50"></td>
       <td>{{ product.quantity }}</td>
       <td>{{ product.regular_price }}</td>
       <td>{{ product.discounted_price }}</td>
       <td>{{ product.product_rating }}</td>
       <td>{{ product.product_review }}</td>
       <td>
-        <a href="{{ url_for('views.delete_product', productid=product.productid) }}" class="btn btn-primary">Edit</a>
+        <a href="{{ url_for('views.edit_product', productid=product.productid) }}" class="btn btn-primary">Edit</a>
       </td>
       <td>
         <a href="{{ url_for('views.delete_product', productid=product.productid) }}" class="btn btn-danger">Delete</a>
@@ -45,4 +46,26 @@
     {% endfor %}
   </tbody>
 </table>
+
+
+<div class="page-btn">
+  {% if products.has_prev %}
+    <a href="{{ url_for('views.view', page=products.prev_num) }}" class="btn">&#8592;</a>
+  {% endif %}
+  {% for num in products.iter_pages(left_edge=1, left_current=2, right_current=3, right_edge=1) %}
+    {% if num %}
+      {% if num != products.page %}
+        <a href="{{ url_for('views.view', page=num) }}" class="btn">{{ num }}</a>
+      {% else %}
+        <span class="btn active">{{ num }}</span>
+      {% endif %}
+    {% else %}
+      <span class="ellipsis">&#8230;</span>
+    {% endif %}
+  {% endfor %}
+  {% if products.has_next %}
+    <a href="{{ url_for('views.view', page=products.next_num) }}" class="btn">&#8594;</a>
+  {% endif %}
+</div>>
+
 {% endblock %}

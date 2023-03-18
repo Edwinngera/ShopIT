@@ -1,0 +1,67 @@
+{% extends "./admin/base.html" %}
+{% block content %}
+<div class="container">
+    <h2 style="margin-top: 40px;">Add Product</h2>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="row">
+            <div class="col-md-6 offset-md-0">
+                <div class="form-group">
+                    {{ form.product_name.label(class="form-control-label") }}
+                    {{ form.product_name(class="form-control form-control-lg") }}
+                </div>
+
+                <div class="form-group">
+                    {{ form.description.label(class="form-control-label") }}
+                    {{ form.description(class="form-control form-control-lg") }}
+                </div>
+
+                <div class="form-group" style="margin-top: 20px;">
+                    {{ form.image.label(class="form-control-label") }}
+                    {{ form.image(class="form-control-file") }}
+                </div>
+                <div class="form-group">
+                    {{ form.quantity.label(class="form-control-label") }}
+                    {{ form.quantity(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{ form.regular_price.label(class="form-control-label") }}
+                    {{ form.regular_price(class="form-control form-control-lg") }}
+                </div>
+
+            </div>
+
+            <div class="col-md-6 offset-md-0">
+                <div class="form-group">
+                    {{ form.discounted_price.label(class="form-control-label") }}
+                    {{ form.discounted_price(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{ form.product_rating.label(class="form-control-label") }}
+                    {{ form.product_rating(class="form-control form-control-lg") }}
+                </div>
+                <div class="form-group">
+                    {{ form.product_review.label(class="form-control-label") }}
+                    {{ form.product_review(class="form-control form-control-lg") }}
+                </div>
+            </div>
+            <div class="form-group" style="margin-top: 20px;">
+                <button type="submit" class="btn btn-primary btn-lg">Update Product</button>
+            </div>
+
+    </form>
+</div>
+</div>
+{% endblock %}

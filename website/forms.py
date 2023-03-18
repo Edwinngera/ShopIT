@@ -36,6 +36,9 @@ class uploadProduct(FlaskForm):
     product_rating = DecimalField('Product_Rating', validators=[DataRequired()])
     product_review = StringField('Product_Review', validators=[DataRequired()])
 
+class orderForm(FlaskForm):
+    items=StringField('Test')
+
 
 
 

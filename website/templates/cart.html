@@ -15,18 +15,18 @@
     <div class="container">
         <div class="navbar">
             <div class="logo">
-                <a href="index.html"><img src="/statimages/logo.png" width="125px"></a>
+                <a href="index.html"><img src="/static/images/new_logo.png" width="125px"></a>
             </div>
             <nav>
                 <ul id="MenuItems">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="products.html">Products</a></li>
+                    <li><a href="{{url_for('views.home')}}">Home</a></li>
+                    <li><a href="{{url_for('views.products')}}">Products</a></li>
                     <li><a href="">About</a></li>
                     <li><a href="">Contact</a></li>
                     <li><a href="account.html">Account</a></li>
                 </ul>
             </nav>
-            <a href="cart.html"><img src="images/cart.png" width="30px" height="30px"></a>
+            <a href="cart.html"><img src="/static/images/cart.png" width="30px" height="30px"></a>
             <img src="images/menu.png" onclick="menutoggle()" class="menu-icon">
         </div>
 
@@ -35,81 +35,7 @@
 
     <!--------------Cart Items details--------------->
     <div class="small-container cart-page">
-
-        <table>
-            <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Subtotal</th>
-            </tr>
-
-            <tr>
-                <td>
-                    <div class="cart-info">
-                        <img src="images/buy-1.jpg">
-                        <div>
-                            <p>Red Printed T-Shirt</p>
-                            <small>Price: $50.00</small><br>
-                            <a href="">Remove</a>
-                        </div>
-                    </div>
-                </td>
-                <td><input type="number" value="1"></td>
-                <td>$50.00</td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="cart-info">
-                        <img src="images/buy-2.jpg">
-                        <div>
-                            <p>HRX Sports Shoes</p>
-                            <small>Price: $75.00</small><br>
-                            <a href="">Remove</a>
-                        </div>
-                    </div>
-                </td>
-                <td><input type="number" value="1"></td>
-                <td>$75.00</td>
-            </tr>
-            <tr>
-                <td>
-                    <div class="cart-info">
-                        <img src="images/buy-3.jpg">
-                        <div>
-                            <p>HRX Gray Trackpants</p>
-                            <small>Price: $75.00</small><br>
-                            <a href="">Remove</a>
-                        </div>
-                    </div>
-                </td>
-                <td><input type="number" value="1"></td>
-                <td>$75.00</td>
-            </tr>
-        </table>
-
-        <div class="total-price">
-            <table>
-                <tr>
-                    <td>Subtotal</td>
-                    <td>$200.00</td>
-                </tr>
-                <tr>
-                    <td>Tax</td>
-                    <td>$35.00</td>
-                </tr>
-                <tr>
-                    <td>Total</td>
-                    <td>$235.00</td>
-                </tr>
-
-            </table>
-        </div>
-
-
-
         <div class="container">
-            <h1>Shopping Cart</h1>
-
             {% if session.cart %}
             <table class="table">
                 <thead>
@@ -118,7 +44,6 @@
                         <th>Price</th>
                         <th>Quantity</th>
                         <th>Subtotal</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -129,19 +54,40 @@
                                 <img src="{{ url_for('static', filename='/uploads/' + item.link) }}">
                                 <div>
                                     <p>{{item.name}}</p>
-                                    <p>{{item.link}}</p>
-                                    <small>{{item.price}}</small><br>
+                                    <small>{{item.description}}</small><br>
                                     <a href="">Remove</a>
                                 </div>
                             </div>
                         </td>
-                        <td><input type="number" value="1"></td>
+                        <td>{{ item.price }}</td>
                         <td>{{ item.quantity }}</td>
-                        <td>$75.00</td>
+                        <td>{{item.quantity* item.price}}</td>
                     </tr>
                     {% endfor %}
+
                 </tbody>
             </table>
+            <div class="total-price">
+                <table>
+                    <tr>
+                        <td>Subtotal</td>
+                        <td>${{subtotal}}</td>
+                    </tr>
+                    <tr>
+                        <td>Tax</td>
+                        <td>${{vat}}</td>
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td>${{total}}</td>
+                    </tr>
+
+                </table>
+            </div>
+
+
+
+
             {% else %}
             <p>Your cart is empty</p>
             {% endif %}
