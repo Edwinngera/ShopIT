@@ -35,23 +35,22 @@ def login():
 @auth.route("/register",methods=["POST", "GET"] )
 def register():
     form = SignupForm(request.form)
-    if request.method == 'POST' and form.validate():
+    print(form.validate())
+    if request.method == 'POST':
         print("Ngera")
         existing_user = User.query.filter_by(email=form.email.data).first()
         print(existing_user)
         if existing_user is None:
                 user = User(
-                    name=form.name.data,
                     email=form.email.data,
                 )
                 user.set_password(form.password.data)
                 db.session.add(user)
                 db.session.commit()  # Create new user
                 login_user(user)  # Log in as newly created user
-                return redirect(url_for('home'))
+                return redirect(url_for('views.home'))
         # flash('A user already exists with that email address.')
     else:
-        print("Invalid")
         return render_template("register.html", form=form)
     
 @login_required

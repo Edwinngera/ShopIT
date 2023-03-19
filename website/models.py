@@ -1,22 +1,34 @@
 from datetime import datetime
 from . import db
+from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(db.Model):
     __table_args__ = {'extend_existing': True}
     userid = db.Column(db.Integer, primary_key=True)
-    fname = db.Column(db.String(20), nullable=False)
-    lname = db.Column(db.String(20), nullable=False)
-    password = db.Column(db.String(60), nullable=False)
-    address1 = db.Column(db.String(20), unique=False, nullable=False)
-    address2 = db.Column(db.String(20), unique=False, nullable=False)
-    city = db.Column(db.String(20), unique=False, nullable=False)
-    state = db.Column(db.String(20), unique=False, nullable=False)
-    country = db.Column(db.String(20), unique=False, nullable=False)
-    zipcode = db.Column(db.String(20), unique=False, nullable=False)
-    email = db.Column(db.String(120), nullable=False)
-    phone = db.Column(db.String(20), nullable=False)
-    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
+    fname = db.Column(db.String(20), nullable=True)
+    lname = db.Column(db.String(20), nullable=True)
+    password = db.Column(db.String(600), nullable=True)
+    address1 = db.Column(db.String(), unique=False, nullable=True)
+    address2 = db.Column(db.String(), unique=False, nullable=True)
+    city = db.Column(db.String(), unique=False, nullable=True)
+    state = db.Column(db.String(), unique=False, nullable=True)
+    country = db.Column(db.String(), unique=False, nullable=True)
+    zipcode = db.Column(db.String(), unique=False, nullable=True)
+    email = db.Column(db.String(), nullable=False)
+    phone = db.Column(db.String(20), nullable=True)
+    is_active = db.Column(db.Boolean(),nullable=True,default=True)
+    image_file = db.Column(db.String(20), nullable=True, default='default.jpg')
+
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password, method="sha256")
+
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+    
+    def get_id(self):
+        return str(self.userid)
 
     def __repr__(self):
         return f"User('{self.fname}', '{self.lname}'), '{self.password}', " \

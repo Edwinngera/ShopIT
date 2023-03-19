@@ -202,6 +202,7 @@ def dashboard():
 
 
 @views.route('/checkout')
+@login_required
 def checkout():
     if current_user.is_authenticated:
         # user is logged in, show checkout page
@@ -209,7 +210,7 @@ def checkout():
         return render_template('checkout.html')
     else:
         # user is not logged in, redirect to login page
-        return redirect(url_for('login'))
+        return redirect(url_for('auth.login'))
 
 
 @views.route('/place_order', methods=['GET', 'POST'])
@@ -222,3 +223,4 @@ def place_order():
     session['cart'] = []  # clear cart after order is placed
     flash('Your order has been placed.', 'success')
     return redirect(url_for('index'))
+

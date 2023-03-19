@@ -15,7 +15,7 @@
     <div class="container">
         <div class="navbar">
             <div class="logo">
-                <a href="index.html"><img src="/static/images/new_logo.png" width="125px"></a>
+                <a href="{{url_for('views.home')}}"><img src="/static/images/new_logo.png" width="125px"></a>
             </div>
             <nav>
                 <ul id="MenuItems">
@@ -94,7 +94,7 @@
         </div>
 
         <div class="total-price">
-            <a href="#" class="btn">Proceed to checkout &#8594;</a>
+            <a href="{{url_for('views.checkout')}}" class="btn">Proceed to checkout &#8594;</a>
         </div>
 
     </div>
