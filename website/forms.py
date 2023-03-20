@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, validators,DateField,FileField,DecimalField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField, validators,DateField,FileField,DecimalField,IntegerField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
 import datetime
 
@@ -18,9 +18,9 @@ class SignupForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     email = StringField(
-        "Email", validators=[DataRequired(), Email(message="Enter a valid email")]
+        "Email"
     )
-    password = PasswordField("Password", validators=[DataRequired()])
+    password = PasswordField("Password")
     submit = SubmitField("Log In")
 
 
@@ -37,6 +37,14 @@ class uploadProduct(FlaskForm):
 
 class orderForm(FlaskForm):
     items=StringField('Test')
+
+
+class CheckoutForm(FlaskForm):
+    shipping_address = StringField('Shipping Address', validators=[DataRequired()])
+    billing_address = StringField('Billing Address', validators=[DataRequired()])
+    card_number = StringField('Card Number', validators=[DataRequired()])
+    card_cvv = IntegerField('Card CVV', validators=[DataRequired()])
+    submit = SubmitField('Submit Order')
 
 
 

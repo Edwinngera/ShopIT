@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, request, flash, url_for, jsonify, Blueprint, abort, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, current_user
-from .forms import uploadProduct
+from .forms import uploadProduct, CheckoutForm
 import os
 from werkzeug.utils import secure_filename
 from .models import Product, Order
@@ -39,10 +39,11 @@ def products_details(productid):
 @views.route('/cart')
 def cart():
     cart = session.get('cart', [])
-    subtotal = sum(int(item['price']) * int(item['quantity']) for item in cart)
-    vat=(16/100)*subtotal
-    total=subtotal+vat
-    return render_template('cart.html' ,subtotal=subtotal, total=total, vat=vat)
+    subtotal = sum(float(item['price']) *
+                   float(item['quantity']) for item in cart)
+    vat = (16/100)*subtotal
+    total = subtotal+vat
+    return render_template('cart.html', subtotal=subtotal, total=total, vat=vat)
 
 
 @views.route('/account')
@@ -119,7 +120,7 @@ def edit_product_submission(productid):
         try:
             app = create_app()
             product = Product.query.get(productid)
-            image=form.image.data
+            image = form.image.data
             filename = secure_filename(image.filename)
             image.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             product.product_name = form.product_name.data,
@@ -140,6 +141,7 @@ def edit_product_submission(productid):
         finally:
             db.session.close()
     return redirect(url_for('views.view'))
+
 
 @views.route("/delete/<int:productid>", methods=["GET", "POST"])
 def delete_product(productid):
@@ -201,16 +203,34 @@ def dashboard():
     return render_template('admin/dashboard.html')
 
 
-@views.route('/checkout')
+@views.route('/checkout', methods=['GET', 'POST'])
 @login_required
 def checkout():
-    if current_user.is_authenticated:
-        # user is logged in, show checkout page
+    form = CheckoutForm()
+    cart = session.get('cart', [])
+    subtotal = sum(float(item['price']) *
+                   float(item['quantity']) for item in cart)
+    vat = (16/100)*subtotal
+    total = subtotal+vat
+    if form.validate_on_submit():
+        shipping_address = form.shipping_address.data
+        billing_address = form.billing_address.data
+        card_number = form.card_number.data
+        card_cvv = form.card_cvv.data
+        items = session.get('cart')
+        order = Order(customer_id=current_user.userid,
+                    order_status='Pending', total_price=total, order_items=str(items))
+        
+        db.session.add(order)
+        db.session.commit()
 
-        return render_template('checkout.html')
-    else:
-        # user is not logged in, redirect to login page
-        return redirect(url_for('auth.login'))
+        # Clear the cart after the order has been placed
+        session['cart'] = []
+        print('Edwin')
+
+        flash('Your order has been placed!', 'success')
+        return redirect(url_for('views.home'))
+    return render_template('checkout.html', title='Checkout', form=form, total=total, vat=vat, subtotal=subtotal)
 
 
 @views.route('/place_order', methods=['GET', 'POST'])
@@ -218,9 +238,9 @@ def place_order():
     items = session.get('cart')
     total = sum(item['price'] * item['quantity'] for item in items)
     order = Order(user_id=current_user.id, items=str(items), total=total)
+
     db.session.add(order)
     db.session.commit()
     session['cart'] = []  # clear cart after order is placed
     flash('Your order has been placed.', 'success')
     return redirect(url_for('index'))
-

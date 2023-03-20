@@ -55,7 +55,7 @@
             <div class="col-3" style="margin-left: 3px;">
                 <a href="{{url_for('views.products_details',productid=product.productid)}}">
                     <img src="{{ url_for('static', filename='/uploads/' + product.image) }}"
-                        alt="{{ product.product_name }}" height="300" width="200"></a>
+                        alt="{{ product.product_name }}" height="400" width="200"></a>
                 <h4 class="card-title">{{ product.product_name }}</h4>
                 <div class="rating">
                     {% for i in range(5) %}
@@ -65,7 +65,7 @@
                         {% endif %}
                         {% endfor %}
                 </div>
-                <p class="card-text"><span>$</span>{{ product.regular_price }}</p>
+                <p class="card-text"><span>$</span><b>{{ product.regular_price }}</b></p>
             </div>
             {% endfor %}
         </div>

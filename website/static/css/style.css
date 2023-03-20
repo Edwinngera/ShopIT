@@ -48,11 +48,10 @@ nav ul li{
 }
 .row{
     display: flex;
-    align-items: center;
+    margin: auto;
+    margin: 20px;
     flex-wrap: wrap;
-    justify-content: space-around;
-/*---------*/
-    
+
 }
 .header .row{
     margin-top: 70px;
@@ -613,7 +612,10 @@ form a{
     overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
   }
 
-
+  .checkout
+  {
+    margin: auto;
+  }
 
 
 

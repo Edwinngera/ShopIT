@@ -29,6 +29,9 @@ class User(db.Model):
     
     def get_id(self):
         return str(self.userid)
+    
+    def is_authenticated(self):
+        return True
 
     def __repr__(self):
         return f"User('{self.fname}', '{self.lname}'), '{self.password}', " \
@@ -89,26 +92,13 @@ class Order(db.Model):
     order_id = db.Column(db.Integer, primary_key=True)
     customer_id = db.Column(db.Integer, db.ForeignKey('user.userid'))
     order_date = db.Column(db.DateTime, default=datetime.utcnow)
-    order_status = db.Column(db.String(20))
-    total_price = db.Column(db.Float)
+    order_status = db.Column(db.String(20),nullable=False)
+    total_price = db.Column(db.Float,nullable=False)
+    order_items=db.Column(db.String(), nullable=False)
 
     customer = db.relationship('User', backref=db.backref('orders', lazy=True))
     def __repr__(self):
         return f"Order('{self.orderid}', '{self.order_date}','{self.total_price}','{self.userid}'')"
-
-class OrderedProduct(db.Model):
-    __table_args__ = {'extend_existing': True}
-    order_item_id = db.Column(db.Integer, primary_key=True)
-    order_id = db.Column(db.Integer, db.ForeignKey('order.order_id'))
-    product_id = db.Column(db.Integer, db.ForeignKey('product.productid'))
-    quantity = db.Column(db.Integer)
-
-    order = db.relationship('Order', backref=db.backref('order_items', lazy=True))
-    product = db.relationship('Product', backref=db.backref('order_items', lazy=True))
-
-    def __repr__(self):
-        return f"Order('{self.ordproductid}', '{self.orderid}','{self.productid}','{self.quantity}')"
-
 
 
 class SaleTransaction(db.Model):
@@ -123,3 +113,5 @@ class SaleTransaction(db.Model):
 
     def __repr__(self):
         return f"Order('{self.payment_id}', '{self.orderid}','{self.payment_date}','{self.amount}', '{self.payment_status}','{self.methods}')"
+
+

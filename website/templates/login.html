@@ -24,28 +24,28 @@
                 <div class="col-md-6 right">
                     <div class="input-box">
                         <header>Login</header>
+                        <form action="/login" method="post">
+                            {{ form.email(placeholder='Email', class_="form-control",style="margin-top: 5px;") }}
+                            {% if form.email.errors %}
+                            <ul class="errors">
+                                {% for error in form.email.errors %}
+                                <li>{{ error }}</li>{% endfor %}
+                            </ul>
+                            {% endif %}
 
+                            {{ form.password(placeholder='Password', class_="form-control",style="margin-top: 10px;") }}
+                            {% if form.password.errors %}
+                            <ul class="errors">
+                                {% for error in form.password.errors %}
+                                <li>{{ error }}</li>{% endfor %}
+                            </ul>
+                            {% endif %}
 
-                        {{ form.email(placeholder='Email', class_="form-control",style="margin-top: 5px;") }}
-                        {% if form.email.errors %}
-                        <ul class="errors">
-                            {% for error in form.email.errors %}
-                            <li>{{ error }}</li>{% endfor %}
-                        </ul>
-                        {% endif %}
+                            {{form.submit(class_="form-control submit", id="btn-lgn" ,style="margin-top: 20px;")}}
 
-                        {{ form.password(placeholder='Password', class_="form-control",style="margin-top: 10px;") }}
-                        {% if form.password.errors %}
-                        <ul class="errors">
-                            {% for error in form.password.errors %}
-                            <li>{{ error }}</li>{% endfor %}
-                        </ul>
-                        {% endif %}
-
-                        {{form.submit(class_="form-control submit", id="btn-lgn" ,style="margin-top: 20px;")}}
-
+                        </form>
                         <div class="signin">
-                            <span>Dont have an account? <a href="#">Sign Up Here</a></span>
+                            <span>Dont have an account? <a href="{{url_for('auth.register')}}">Sign Up Here</a></span>
                         </div>
                     </div>
                 </div>
