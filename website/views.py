@@ -25,7 +25,7 @@ def home():
 def products():
     page = request.args.get('page', 1, type=int)
     print(page)
-    products = Product.query.paginate(page=page, per_page=8)
+    products = Product.query.paginate(page=page, per_page=7)
     # products = Product.query.all()
     return render_template('products.html', products=products)
 
@@ -200,7 +200,19 @@ def view():
 
 @views.route('/admin/')
 def dashboard():
-    return render_template('admin/dashboard.html')
+    orders=Order.query.all()
+    print(orders)
+    return render_template('admin/dashboard.html', orders=len(orders))
+
+
+
+@views.route('/orders/')
+def orders():
+    page = request.args.get('page', 1, type=int)
+    orders = Order.query.paginate(page=page, per_page=8)
+    print(orders.items)
+    return render_template('admin/orders.html',orders=orders)
+
 
 
 @views.route('/checkout', methods=['GET', 'POST'])
@@ -244,3 +256,15 @@ def place_order():
     session['cart'] = []  # clear cart after order is placed
     flash('Your order has been placed.', 'success')
     return redirect(url_for('index'))
+
+
+@views.route('/view_order', methods=['GET', 'POST'])
+def view_orders():
+    order = Order.query.filter(order.customer_id == current_user.id)
+ 
+
+
+
+
+
+

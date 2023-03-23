@@ -1,5 +1,5 @@
 {% extends "./admin/base.html" %}
-{% block content  %}
+{% block content %}
 
 <div id="content-wrapper" class="d-flex flex-column">
 
@@ -15,8 +15,7 @@
             </button>
 
             <!-- Topbar Search -->
-            <form
-                class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+            <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
                 <div class="input-group">
                     <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
                         aria-label="Search" aria-describedby="basic-addon2">
@@ -43,8 +42,7 @@
                         <form class="form-inline mr-auto w-100 navbar-search">
                             <div class="input-group">
                                 <input type="text" class="form-control bg-light border-0 small"
-                                    placeholder="Search for..." aria-label="Search"
-                                    aria-describedby="basic-addon2">
+                                    placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" type="button">
                                         <i class="fas fa-search fa-sm"></i>
@@ -173,8 +171,8 @@
 
                 <!-- Nav Item - User Information -->
                 <li class="nav-item dropdown no-arrow">
-                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
                         <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
                         <img class="img-profile rounded-circle" src="img/undraw_profile.svg">
                     </a>
@@ -244,8 +242,8 @@
                             <div class="row no-gutters align-items-center">
                                 <div class="col mr-2">
                                     <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                        Earnings (Monthly)</div>
-                                    <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
+                                        Total Orders</div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800">{{orders}}</div>
                                 </div>
                                 <div class="col-auto">
                                     <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -269,9 +267,8 @@
                                         </div>
                                         <div class="col">
                                             <div class="progress progress-sm mr-2">
-                                                <div class="progress-bar bg-info" role="progressbar"
-                                                    style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
+                                                <div class="progress-bar bg-info" role="progressbar" style="width: 50%"
+                                                    aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                                             </div>
                                         </div>
                                     </div>
@@ -311,28 +308,27 @@
                 <div class="col-xl-8 col-lg-7">
                     <div class="card shadow mb-4">
                         <!-- Card Header - Dropdown -->
-                        <div
-                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                             <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
                             <div class="dropdown no-arrow">
                                 <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                <!-- <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
                                     aria-labelledby="dropdownMenuLink">
                                     <div class="dropdown-header">Dropdown Header:</div>
                                     <a class="dropdown-item" href="#">Action</a>
                                     <a class="dropdown-item" href="#">Another action</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="#">Something else here</a>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <!-- Card Body -->
                         <div class="card-body">
-                            <div class="chart-area">
-                                <canvas id="myAreaChart"></canvas>
+                            <div>
+                                <canvas id="myChart"></canvas>
                             </div>
                         </div>
                     </div>
@@ -342,8 +338,7 @@
                 <div class="col-xl-4 col-lg-5">
                     <div class="card shadow mb-4">
                         <!-- Card Header - Dropdown -->
-                        <div
-                            class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                             <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
                             <div class="dropdown no-arrow">
                                 <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
@@ -401,4 +396,37 @@
 </div>
 
 
-{%  endblock %}
+<script>
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            datasets: [{
+                data: [86, 114, 106, 106, 107, 111, 133],
+                label: "Total",
+                borderColor: "rgb(62,149,205)",
+                backgroundColor: "rgb(62,149,205,0.1)",
+            }, {
+                data: [70, 90, 44, 60, 83, 90, 100],
+                label: "Accepted",
+                borderColor: "rgb(60,186,159)",
+                backgroundColor: "rgb(60,186,159,0.1)",
+            }, {
+                data: [10, 21, 60, 44, 17, 21, 17],
+                label: "Pending",
+                borderColor: "rgb(255,165,0)",
+                backgroundColor: "rgb(255,165,0,0.1)",
+            }, {
+                data: [6, 3, 2, 2, 7, 0, 16],
+                label: "Rejected",
+                borderColor: "rgb(196,88,80)",
+                backgroundColor: "rgb(196,88,80,0.1)",
+            }
+            ]
+        },
+    });
+</script>
+
+
+{% endblock %}

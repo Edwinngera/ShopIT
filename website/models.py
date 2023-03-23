@@ -98,7 +98,7 @@ class Order(db.Model):
 
     customer = db.relationship('User', backref=db.backref('orders', lazy=True))
     def __repr__(self):
-        return f"Order('{self.orderid}', '{self.order_date}','{self.total_price}','{self.userid}'')"
+        return f"Order('{self.order_id}','{self.order_status}',,'{self.order_items}', '{self.order_date}','{self.total_price}','{self.customer}','{self.customer_id}'')"
 
 
 class SaleTransaction(db.Model):

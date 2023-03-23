@@ -1,164 +1,67 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+{% block content%}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Products - RedStore | Ecommerce Website Design</title>
-    <link rel="stylesheet" href="/static/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
-
-<body>
-    <div class="container">
-        <div class="navbar">
-            <div class="logo">
-                <a href="index.html"><img src="/static/images/new_logo.png" width="125px"></a>
-            </div>
-            <nav>
-                <ul id="MenuItems">
-                    <li><a href="{{url_for('views.home')}}">Home</a></li>
-                    <li><a href="{{url_for('views.products')}}">Products</a></li>
-                    <li><a href="">About</a></li>
-                    <li><a href="">Contact</a></li>
-                    <li><a href="account.html">Account</a></li>
-                </ul>
-            </nav>
-            <a href="cart.html"><img src="/static/images/cart.png" width="30px" height="30px"></a>
-            <img src="images/menu.png" onclick="menutoggle()" class="menu-icon">
-        </div>
-
+<!----------------- title -------------->
+<div class="small-container">
+    <div class="row row-2">
+        <h2>All Products</h2>
+        <select>
+            <option>Default Shorting</option>
+            <option>Short by price</option>
+            <option>Short by popularity</option>
+            <option>Short by rating</option>
+            <option>Short by sale</option>
+        </select>
     </div>
-    <!----------------- title -------------->
-    <div class="small-container">
-        <div class="row row-2">
-            <h2>All Products</h2>
-            <select>
-                <option>Default Shorting</option>
-                <option>Short by price</option>
-                <option>Short by popularity</option>
-                <option>Short by rating</option>
-                <option>Short by sale</option>
-            </select>
-        </div>
 
 
-        <div class="container">
-            {% for product_index in range(0, products.items|length, 3) %}
-            <div class="row">
-                {% for product in products.items[product_index:product_index+3] %}
-                <div class="col-3" style="margin-left: 3px;">
-                    <a href="{{url_for('views.products_details',productid=product.productid)}}">
+    <div class="container">
+        {% for product_index in range(0, products.items|length, 3) %}
+        <div class="row">
+            {% for product in products.items[product_index:product_index+3] %}
+            <div class="col-3" style="margin-left: 3px;">
+                <a href="{{url_for('views.products_details',productid=product.productid)}}">
                     <img src="{{ url_for('static', filename='/uploads/' + product.image) }}"
                         alt="{{ product.product_name }}" height="300" width="200"></a>
-                    <h4 class="card-title">{{ product.product_name }}</h4>
-                    <div class="rating">
-                        {% for i in range(5) %}
-                        {% if i < product.product_rating %} <i class="fa fa-star"></i>
-                            {% else %}
-                            <i class="fa fa-star-o"></i>
-                            {% endif %}
-                            {% endfor %}
-                    </div>
-                    <p class="card-text"><span>$</span>{{ product.regular_price }}</p>
+                <h4 class="card-title">{{ product.product_name }}</h4>
+                <div class="rating">
+                    {% for i in range(5) %}
+                    {% if i < product.product_rating %} <i class="fa fa-star"></i>
+                        {% else %}
+                        <i class="fa fa-star-o"></i>
+                        {% endif %}
+                        {% endfor %}
                 </div>
-                {% endfor %}
+                <p class="card-text"><span>$</span>{{ product.regular_price }}</p>
             </div>
             {% endfor %}
         </div>
-
-        <div class="page-btn">
-            {% if products.has_prev %}
-              <a href="{{ url_for('views.products', page=products.prev_num) }}">&#8592;</a>
-            {% endif %}
-            {% for num in products.iter_pages(left_edge=1, left_current=2, right_current=3, right_edge=1) %}
-              {% if num %}
-                {% if num != products.page %}
-                  <a href="{{ url_for('views.products', page=num) }}">{{ num }}</a>
-                {% else %}
-                  <span>{{ num }}</span>
-                {% endif %}
-              {% else %}
-                <span class="ellipsis">&#8230;</span>
-              {% endif %}
-            {% endfor %}
-            {% if products.has_next %}
-              <a href="{{ url_for('views.products', page=products.next_num) }}">&#8594;</a>
-            {% endif %}
-          </div>>
-
-
+        {% endfor %}
     </div>
 
-
-    <!----------Footer--------------->
-
-    <div class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="footer-col1">
-                    <h3>Download Our App</h3>
-                    <p>Download App for Android and ios mobile phone.</p>
-                    <div class="app-logo">
-                        <img src="images/play-store.png">
-                        <img src="images/app-store.png">
-                    </div>
-                </div>
-                <div class="footer-col2">
-                    <img src="images/logo-white.png">
-                    <p>Our Purpose Is To Sustainably Make the Pleasure and Benefits of Sports Accessible to the Many.
-                    </p>
-                </div>
-                <div class="footer-col3">
-                    <h3>Useful Links</h3>
-                    <ul>
-                        <li>Coupons</li>
-                        <li>Blog Post</li>
-                        <li>Return Policy</li>
-                        <li>Join Affiliate</li>
-                    </ul>
-                </div>
-                <div class="footer-col4">
-                    <h3>Follow Us</h3>
-                    <ul>
-                        <li>Facebook</li>
-                        <li>Twitter
-                        <li>
-                        <li>Instagram</li>
-                        <li>YouTube</li>
-                    </ul>
-                </div>
-            </div>
-            <hr>
-            <p class="copyright">Copyright 2020 - Easy Tutorials</p>
-        </div>
-
-    </div>
+    <div class="page-btn">
+        {% if products.has_prev %}
+        <a href="{{ url_for('views.products', page=products.prev_num) }}">&#8592;</a>
+        {% endif %}
+        {% for num in products.iter_pages(left_edge=1, left_current=2, right_current=3, right_edge=1) %}
+        {% if num %}
+        {% if num != products.page %}
+        <a href="{{ url_for('views.products', page=num) }}">{{ num }}</a>
+        {% else %}
+        <span>{{ num }}</span>
+        {% endif %}
+        {% else %}
+        <span class="ellipsis">&#8230;</span>
+        {% endif %}
+        {% endfor %}
+        {% if products.has_next %}
+        <a href="{{ url_for('views.products', page=products.next_num) }}">&#8594;</a>
+        {% endif %}
+    </div>>
 
 
+</div>
 
-    <!-------------js for toggle menu-------------->
-
-    <script>
-
-        var MenuItems = document.getElementById("MenuItems");
-
-        MenuItems.style.maxHeight = "0px";
-
-        function menutoggle() {
-            if (MenuItems.style.maxHeight == "0px") {
-                MenuItems.style.maxHeight = "200px";
-            } else {
-                MenuItems.style.maxHeight = "0px"
-            }
-        }
-
-    </script>
+{%endblock%}
 
 
-
-</body>
-
-</html>

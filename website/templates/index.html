@@ -17,18 +17,18 @@
         <div class="container">
             <div class="navbar">
                 <div class="logo">
-                    <a href="index.html"><img src="/static/images/new_logo.png" width="125px"></a>
+                    <a href="{{url_for('views.home')}}"><img src="/static/images/new_logo.png" width="125px"></a>
                 </div>
                 <nav>
                     <ul id="MenuItems">
-                        <li><a href="index.html">Home</a></li>
+                        <li><a href="{{url_for('views.home')}}">Home</a></li>
                         <li><a href="{{url_for('views.products')}}">Products</a></li>
                         <li><a href="">About</a></li>
                         <li><a href="">Contact</a></li>
                         <li><a href="{{url_for('views.account')}}">Account</a></li>
                     </ul>
                 </nav>
-                <a href="cart.html"><img src="/static/images/cart.png" width="30px" height="30px"></a>
+                <a href="{{url_for('views.cart')}}"><img src="/static/images/cart.png" width="30px" height="30px"></a>
                 <img src="/static/images/menu.png" onclick="menutoggle()" class="menu-icon">
             </div>
             <div class="row">
@@ -203,7 +203,7 @@
                 </div>
             </div>
             <hr>
-            <p class="copyright">Copyright 2020 - Edwin Rimui</p>
+            <p class="copyright">Copyright 2023 - Edwin Rimui</p>
         </div>
 
     </div>
