@@ -3,27 +3,32 @@
 
 
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Products</h1>
+    <h1 class="h3 mb-0 text-gray-800">Users</h1>
     <a style="margin-top:  40px;" href="{{url_for('views.add_product')}}"
         class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-            class="fas fa-download fa-sm text-white-50"></i> Add Staff</a>
+            class="fas fa-download fa-sm text-white-50"></i> Add Staff
+    </a>
 </div>
 
 <div class="small-container">
     <table class="styled-table">
         <thead>
             <tr>
-                <th>Order Date</th>
-                <th>Amount</th>
-                <th>Order Status</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <td></td>
             </tr>
         </thead>
         <tbody>
-            {% for order in orders %}
+            {% for user in users %}
             <tr>
-                <td>{{order. order_date}}</td>
-                <td>{{order.total_price}}</td>
-                <td>{{order.order_status}}</td>
+                <td>{{user.name}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.role}}</td>
+                <td>
+                    <a href="{{ url_for('views.edit_user', userid=user.userid) }}" class="btn btn-primary">Edit</a>
+                </td>
             </tr>
             {% endfor%}
             <!-- and so on... -->

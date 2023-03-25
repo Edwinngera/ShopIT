@@ -35,9 +35,6 @@ class uploadProduct(FlaskForm):
     product_rating = DecimalField('Product_Rating', validators=[DataRequired()])
     product_review = StringField('Product_Review', validators=[DataRequired()])
 
-class orderForm(FlaskForm):
-    items=StringField('Test')
-
 
 class CheckoutForm(FlaskForm):
     shipping_address = StringField('Shipping Address', validators=[DataRequired()])
@@ -45,6 +42,17 @@ class CheckoutForm(FlaskForm):
     card_number = StringField('Card Number', validators=[DataRequired()])
     card_cvv = IntegerField('Card CVV', validators=[DataRequired()])
     submit = SubmitField('Submit Order')
+
+
+class EditUserForm(FlaskForm):
+    name = StringField('Name', validators=[DataRequired()])
+    email=StringField('Email', validators=[DataRequired()])
+    role=SelectField('Role', validators=[DataRequired()],choices=[('Admin', 'Admin'),('User', 'User')])
+
+
+
+
+
 
 
 

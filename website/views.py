@@ -1,10 +1,10 @@
 from flask import Flask, render_template, redirect, request, flash, url_for, jsonify, Blueprint, abort, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, current_user
-from .forms import uploadProduct, CheckoutForm
+from .forms import uploadProduct, CheckoutForm,EditUserForm
 import os
 from werkzeug.utils import secure_filename
-from .models import Product, Order
+from .models import Product, Order,User
 from . import db
 from . import create_app
 
@@ -104,8 +104,6 @@ def orders():
     orders = Order.query.paginate(page=page, per_page=8)
     print(orders.items)
     return render_template('admin/orders.html',orders=orders)
-
-
 
 @views.route('/checkout', methods=['GET', 'POST'])
 @login_required
@@ -260,7 +258,25 @@ def view_orders():
  
 @views.route('/users', methods=['GET', 'POST'])
 def admin_users():
-    orders=Order.query.all()
-    return render_template('admin/staff.html',orders=orders)
+    page = request.args.get('page', 1, type=int)
+    users = User.query.paginate(page=page, per_page=4)
+    return render_template('admin/staff.html',users=users)
 
+@views.route('/edit/users/<int:userid>', methods=['GET', 'POST'])
+def edit_user(userid):
+    user=User.query.get(userid)
+    form = EditUserForm(
+        name=user.fname,
+        role=user.role,
+        email=user.email,
+    )
+    return render_template('admin/edit_user.html', form=form)
+
+
+    # response={
+    #     "userid": user.userid,
+    #     "username": user.email
+        
+    # }
+    # return jsonify(response)
 
