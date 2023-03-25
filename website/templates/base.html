@@ -12,10 +12,10 @@
 </head>
 
 <body>
-
     <div class="header">
         <div class="container">
             <div class="navbar">
+
                 <div class="logo">
                     <a href="{{url_for('views.home')}}"><img src="/static/images/new_logo.png" width="125px"></a>
                 </div>
@@ -23,17 +23,13 @@
                     <ul id="MenuItems">
                         <li><a href="{{url_for('views.home')}}">Home</a></li>
                         <li><a href="{{url_for('views.products')}}">Products</a></li>
-                        <li><a href="">About</a>
-                            <ul class="dropdown">
-                                <li><a href="#">Sub-1</a></li>
-                                <li><a href="#">Sub-2</a></li>
-                                <li><a href="#">Sub-3</a></li>
+                        <li class="dropdown">Account
+                            <ul class="dropdown-content">
+                                <li><a href="#">Link 1</a></li>
+                                <li><a href="#">Link 2</a></li>
+                                <li><a href="#">Link 3</a></li>
                             </ul>
-
                         </li>
-                        <li><a href="">Contact</a></li>
-
-                        <li><a href="{{url_for('views.account')}}">Account</a></li>
                     </ul>
                 </nav>
                 <a href="{{url_for('views.cart')}}"><img src="/static/images/cart.png" width="30px" height="30px"></a>
@@ -56,12 +52,12 @@
                     <h3>Download Our App</h3>
                     <p>Download App for Android and ios mobile phone.</p>
                     <div class="app-logo">
-                        <img src="images/play-store.png">
-                        <img src="images/app-store.png">
+                        <img src="/static/images/play-store.png">
+                        <img src="/static/images/app-store.png">
                     </div>
                 </div>
                 <div class="footer-col2">
-                    <img src="images/logo-white.png">
+                    <img src="/static/images/logo-white.png">
                     <p>Our Purpose Is To Sustainably Make the Pleasure and Benefits of Sports Accessible to the Many.
                     </p>
                 </div>

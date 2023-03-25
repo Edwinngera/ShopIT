@@ -11,7 +11,7 @@
         <div class="col-2">
             <p>Home / T-Shirt</p>
             <h1>{{product.product_name}}</h1>
-            <h4>$50.00</h4>
+            <h4> ${{product.discounted_price}}</h4>
             <a href="{{url_for('views.add_to_cart', productid=product.productid)}}" class="btn">Add To Cart</a>
             <h3>PRODUCT DETAILS <i class="fa fa-indent"></i></h3>
             <br>
@@ -19,48 +19,6 @@
                 shorts for your morning workout or a denims for an evening out with the guys.</p>
         </div>
     </div>
-</div>
-
-<div class="footer">
-    <div class="container">
-        <div class="row">
-            <div class="footer-col1">
-                <h3>Download Our App</h3>
-                <p>Download App for Android and ios mobile phone.</p>
-                <div class="app-logo">
-                    <img src="images/play-store.png">
-                    <img src="images/app-store.png">
-                </div>
-            </div>
-            <div class="footer-col2">
-                <img src="images/logo-white.png">
-                <p>Our Purpose Is To Sustainably Make the Pleasure and Benefits of Sports Accessible to the Many.
-                </p>
-            </div>
-            <div class="footer-col3">
-                <h3>Useful Links</h3>
-                <ul>
-                    <li>Coupons</li>
-                    <li>Blog Post</li>
-                    <li>Return Policy</li>
-                    <li>Join Affiliate</li>
-                </ul>
-            </div>
-            <div class="footer-col4">
-                <h3>Follow Us</h3>
-                <ul>
-                    <li>Facebook</li>
-                    <li>Twitter
-                    <li>
-                    <li>Instagram</li>
-                    <li>YouTube</li>
-                </ul>
-            </div>
-        </div>
-        <hr>
-        <p class="copyright">Copyright 2020 - Easy Tutorials</p>
-    </div>
-
 </div>
 
 {%endblock%}

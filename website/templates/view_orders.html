@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="small-container">
+    <h1>My Orders</h1>
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Order Date</th>
+                <th>Amount</th>
+                <th>Order Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{order. order_date}}</td>
+                <td>{{order.total_price}}</td>
+                <td>{{order.order_status}}</td>
+            </tr>
+            {% endfor%}
+
+            <!-- and so on... -->
+        </tbody>
+    </table>
+
+</div>
+{%endblock%}

@@ -51,16 +51,106 @@ def account():
     return render_template('account.html')
 
 
-@views.route('/admin_users')
-def admin_users():
-    return render_template('adminUsers.html')
+
+@views.route("/add_to_cart/<int:productid>")
+def add_to_cart(productid):
+    product = Product.query.get_or_404(productid)
+
+    cart_item = {
+        'id': product.productid,
+        'name': product.product_name,
+        'description': product.description,
+        'price': product.regular_price if product.discounted_price is None else product.discounted_price,
+        'quantity': 1,
+        'link': product.image
+    }
+
+    cart = session.get('cart', [])
+
+    for item in cart:
+        if item['id'] == cart_item['id']:
+            item['quantity'] += 1
+            break
+    else:
+        cart.append(cart_item)
+
+    session['cart'] = cart
+
+    flash('Item added to cart', 'success')
+
+    return redirect(url_for('views.cart'))
+
+    # retrieve the current cart from the session or create a new if it doesnt exist
 
 
-@views.route('/upload_products')
-def test():
-    form = uploadProduct()
-    return render_template('admin/add_products.html', form=form)
+@views.route('/view')
+def view():
+    page = request.args.get('page', 1, type=int)
+    products = Product.query.paginate(page=page, per_page=8)
+    return render_template('admin/view_products.html', products=products)
 
+
+@views.route('/admin/')
+def dashboard():
+    orders=Order.query.all()
+    products=Product.query.all()
+    return render_template('admin/dashboard.html', orders=len(orders), products=len(products))
+
+
+
+@views.route('/orders/')
+def orders():
+    page = request.args.get('page', 1, type=int)
+    orders = Order.query.paginate(page=page, per_page=8)
+    print(orders.items)
+    return render_template('admin/orders.html',orders=orders)
+
+
+
+@views.route('/checkout', methods=['GET', 'POST'])
+@login_required
+def checkout():
+    form = CheckoutForm()
+    cart = session.get('cart', [])
+    subtotal = sum(float(item['price']) *
+                   float(item['quantity']) for item in cart)
+    vat = (16/100)*subtotal
+    total = subtotal+vat
+    if form.validate_on_submit():
+        shipping_address = form.shipping_address.data
+        billing_address = form.billing_address.data
+        card_number = form.card_number.data
+        card_cvv = form.card_cvv.data
+        items = session.get('cart')
+        order = Order(customer_id=current_user.userid,
+                    order_status='Pending', total_price=total, order_items=str(items))
+        
+        db.session.add(order)
+        db.session.commit()
+
+        # Clear the cart after the order has been placed
+        session['cart'] = []
+        print('Edwin')
+
+        flash('Your order has been placed!', 'success')
+        return redirect(url_for('views.view_orders'))
+    return render_template('checkout.html', title='Checkout', form=form, total=total, vat=vat, subtotal=subtotal)
+
+
+@views.route('/place_order', methods=['GET', 'POST'])
+def place_order():
+    items = session.get('cart')
+    total = sum(item['price'] * item['quantity'] for item in items)
+    order = Order(user_id=current_user.id, items=str(items), total=total)
+
+    db.session.add(order)
+    db.session.commit()
+    session['cart'] = []  # clear cart after order is placed
+    flash('Your order has been placed.', 'success')
+    return redirect(url_for('index'))
+
+
+# Admin
 
 @views.route('/add-product', methods=['POST', 'GET'])
 def add_product():
@@ -160,111 +250,17 @@ def delete_product(productid):
     return redirect()
 
 
-@views.route("/add_to_cart/<int:productid>")
-def add_to_cart(productid):
-    product = Product.query.get_or_404(productid)
-
-    cart_item = {
-        'id': product.productid,
-        'name': product.product_name,
-        'description': product.description,
-        'price': product.regular_price if product.discounted_price is None else product.discounted_price,
-        'quantity': 1,
-        'link': product.image
-    }
-
-    cart = session.get('cart', [])
-
-    for item in cart:
-        if item['id'] == cart_item['id']:
-            item['quantity'] += 1
-            break
-    else:
-        cart.append(cart_item)
-
-    session['cart'] = cart
-
-    flash('Item added to cart', 'success')
-
-    return redirect(url_for('views.cart'))
-
-    # retrieve the current cart from the session or create a new if it doesnt exist
-
-
-@views.route('/view')
-def view():
-    page = request.args.get('page', 1, type=int)
-    products = Product.query.paginate(page=page, per_page=8)
-    return render_template('admin/view_products.html', products=products)
-
-
-@views.route('/admin/')
-def dashboard():
-    orders=Order.query.all()
-    print(orders)
-    return render_template('admin/dashboard.html', orders=len(orders))
-
-
-
-@views.route('/orders/')
-def orders():
-    page = request.args.get('page', 1, type=int)
-    orders = Order.query.paginate(page=page, per_page=8)
-    print(orders.items)
-    return render_template('admin/orders.html',orders=orders)
-
-
-
-@views.route('/checkout', methods=['GET', 'POST'])
-@login_required
-def checkout():
-    form = CheckoutForm()
-    cart = session.get('cart', [])
-    subtotal = sum(float(item['price']) *
-                   float(item['quantity']) for item in cart)
-    vat = (16/100)*subtotal
-    total = subtotal+vat
-    if form.validate_on_submit():
-        shipping_address = form.shipping_address.data
-        billing_address = form.billing_address.data
-        card_number = form.card_number.data
-        card_cvv = form.card_cvv.data
-        items = session.get('cart')
-        order = Order(customer_id=current_user.userid,
-                    order_status='Pending', total_price=total, order_items=str(items))
-        
-        db.session.add(order)
-        db.session.commit()
-
-        # Clear the cart after the order has been placed
-        session['cart'] = []
-        print('Edwin')
-
-        flash('Your order has been placed!', 'success')
-        return redirect(url_for('views.home'))
-    return render_template('checkout.html', title='Checkout', form=form, total=total, vat=vat, subtotal=subtotal)
-
-
-@views.route('/place_order', methods=['GET', 'POST'])
-def place_order():
-    items = session.get('cart')
-    total = sum(item['price'] * item['quantity'] for item in items)
-    order = Order(user_id=current_user.id, items=str(items), total=total)
-
-    db.session.add(order)
-    db.session.commit()
-    session['cart'] = []  # clear cart after order is placed
-    flash('Your order has been placed.', 'success')
-    return redirect(url_for('index'))
-
-
 @views.route('/view_order', methods=['GET', 'POST'])
 def view_orders():
-    order = Order.query.filter(order.customer_id == current_user.id)
+    order_reponse=[]
+    orders = Order.query.filter(Order.customer_id == current_user.userid).all()
+    for order in orders:
+        print(order.customer_id)
+    return render_template('view_orders.html',orders=orders)
  
-
-
-
-
+@views.route('/users', methods=['GET', 'POST'])
+def admin_users():
+    orders=Order.query.all()
+    return render_template('admin/staff.html',orders=orders)
 
 

@@ -8,6 +8,7 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 
 
+
 db=SQLAlchemy()
 
 
@@ -22,7 +23,7 @@ def create_app():
     from .views import views
     from .auth import auth
 
-    from .models import User,Product,Category,ProductCategory
+    from .models import User,Product,Role
 
     app.register_blueprint(views,url_prefix='/')
     app.register_blueprint(auth,url_prefix='/')
@@ -39,6 +40,8 @@ def create_app():
         if userid is not None:
             return User.query.get(userid)
         return None
+    
+ 
     
     return app
 

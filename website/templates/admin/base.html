@@ -23,8 +23,8 @@
             href="{{url_for('views.view')}}">Products</a>
         <a class=" {% if request.path == url_for('views.orders') %}active{% endif %}"
             href="{{url_for('views.orders')}}">Orders</a>
-        <a href="#about">Payments</a>
-
+        <a class=" {% if request.path == url_for('views.admin_users') %}active{% endif %}"
+            href="{{url_for('views.admin_users')}}">Our Staff</a>
     </div>
 
     <div class="content">

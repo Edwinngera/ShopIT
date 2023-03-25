@@ -18,7 +18,8 @@ p {
 }
 
 .header {
-    background: radial-gradient(#fff, hsl(253, 100%, 92%));
+    /* background: radial-gradient(#fff, hsl(253, 100%, 92%)); */
+    background-color: white;
 }
 
 .container {
@@ -52,36 +53,6 @@ nav ul li {
 
 
 
-/* ----------------------------- */
-
-ul li ul {
-    visibility: hidden;
-    opacity: 0;
-    position: absolute;
-    transition: all 0.5s ease;
-    margin-top: 1rem;
-    left: 0;
-    display: none;
-
-  }
-  
-  ul li:hover > ul,
-  ul li ul:hover {
-    visibility: visible;
-    opacity: 1;
-    display: block;
-    color: red;
-  }
-  
-  ul li ul li {
-    clear: both;
-    width: 100%;
-  }
-
-
-
-
-/*-------------------------------*/
 
 .menu-icon {
     display: none;
@@ -720,31 +691,84 @@ form a {
     margin: auto;
 }
 
+
+.styled-table
+{
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9rem;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+
+.styled-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+}
+
+
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+}
+
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #009879;
+}
+
+
+
+/* The dropdown container */
 .dropdown {
-    opacity: 0;
+    float: right;
+    overflow: hidden;
+  }
+  
+
+  /* Dropdown content (hidden by default) */
+  .dropdown-content {
+    display: none;
     position: absolute;
-    width: 500px;
-    z-index: 2;
-    background: black;
-    
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    height: 3rem;
-    margin-top: 2rem;
-    padding: 0.5rem;
-   
-    transform: translateX(-40%);
-    transition: opacity .15s ease-out;
-}
+    background-color: #f9f9f9;
+    min-width: 90px;
+    /* box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
+    z-index: 1;
+  }
+  
+  /* Links inside the dropdown */
+  .dropdown-content li {
+    float: none;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: right;
+  }
+  
+  /* Add a grey background color to dropdown links on hover */
+  .dropdown-content li a:hover {
+    background-color: #ddd;
+  }
+  
+  /* Show the dropdown menu on hover */
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
 
-.dropdown-item a {
-    width: 100%;
-    height: 100%;
-}
-
-.has-dropdown:focus-within .dropdown   {
-    opacity: 1;
-    pointer-events: auto;
-}
 
