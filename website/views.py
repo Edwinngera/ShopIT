@@ -88,6 +88,18 @@ def add_to_cart(productid):
 
     # retrieve the current cart from the session or create a new if it doesnt exist
 
+#remove item from the cart
+@views.route('/remove_item/<int:id>', methods=['GET'])
+def remove_item(id):
+    cart=session["cart"]
+    for i in cart:
+        if int(i['id']) == id:
+            print("Edwin")
+            cart.remove(i)
+            session['cart'] = cart
+    return redirect(url_for('views.cart'))
+
+
 
 @views.route('/view')
 def view():
@@ -264,7 +276,8 @@ def view_orders():
 
 
 @views.route('/users', methods=['GET', 'POST'])
-# @role_required('Admin')
+@login_required
+@role_required('Admin')
 def admin_users():
     page = request.args.get('page', 1, type=int)
     users = User.query.paginate(page=page, per_page=4)

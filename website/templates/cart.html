@@ -23,7 +23,7 @@
                                 <div>
                                     <p>{{item.name}}</p>
                                     <small>{{item.description}}</small><br>
-                                    <a href="">Remove</a>
+                                    <a href="{{ url_for('views.remove_item', id=item.id) }}">Remove</a>
                                 </div>
                             </div>
                         </td>
