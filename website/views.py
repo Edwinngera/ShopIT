@@ -7,9 +7,15 @@ from werkzeug.utils import secure_filename
 from .models import Product, Order,User
 from . import db
 from . import create_app
+from .auth import role_required
+
 
 
 views = Blueprint('views', __name__)
+
+        
+
+
 
 
 @views.route('/')
@@ -247,7 +253,6 @@ def delete_product(productid):
 
     return redirect()
 
-
 @views.route('/view_order', methods=['GET', 'POST'])
 def view_orders():
     order_reponse=[]
@@ -256,7 +261,10 @@ def view_orders():
         print(order.customer_id)
     return render_template('view_orders.html',orders=orders)
  
+
+
 @views.route('/users', methods=['GET', 'POST'])
+# @role_required('Admin')
 def admin_users():
     page = request.args.get('page', 1, type=int)
     users = User.query.paginate(page=page, per_page=4)

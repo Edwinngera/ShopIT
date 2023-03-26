@@ -1,6 +1,7 @@
 from flask_login import login_required, login_manager
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for,abort
 from .models import User
+from functools import wraps
 from flask_login import (
     login_required,
     logout_user,
@@ -14,6 +15,20 @@ from .forms import (
 from . import db
 
 auth = Blueprint('auth', __name__)
+
+# Custom role_required decorator
+def role_required(role_name):
+    def decorator(func):
+        @wraps(func)
+        def wrapper(*args, **kwargs):
+            if not current_user.is_authenticated:
+                return login_manager.unauthorized()
+            if current_user.role!=role_name:
+                abort(403)
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
+            
 
 
 @auth.route("/login", methods=["POST", "GET"])
