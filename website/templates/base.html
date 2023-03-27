@@ -25,9 +25,10 @@
                         <li><a href="{{url_for('views.products')}}">Products</a></li>
                         <li class="dropdown">Account
                             <ul class="dropdown-content">
-                                <li><a href="#">Link 1</a></li>
-                                <li><a href="#">Link 2</a></li>
-                                <li><a href="#">Link 3</a></li>
+                                <li><a href="#">My Account</a></li>
+                                <li><a href="#">Orders</a></li>
+                                <li><a href="#">Login</a></li>
+                                <li><a href="{{url_for('auth.logout')}}">Logut</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -57,7 +58,7 @@
                     </div>
                 </div>
                 <div class="footer-col2">
-                    <img src="/static/images/logo-white.png">
+                    <img src="/static/images/logo2.png" style="height:100px; width: 100px;">
                     <p>Our Purpose Is To Sustainably Make the Pleasure and Benefits of Sports Accessible to the Many.
                     </p>
                 </div>

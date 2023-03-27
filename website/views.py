@@ -8,16 +8,13 @@ from .models import Product, Order,User
 from . import db
 from . import create_app
 from .auth import role_required
+from datetime import datetime
 
 
 
 views = Blueprint('views', __name__)
 
-        
-
-
-
-
+#Customer views
 @views.route('/')
 def home():
     latest_products = Product.query.limit(6).all()
@@ -106,14 +103,6 @@ def view():
     page = request.args.get('page', 1, type=int)
     products = Product.query.paginate(page=page, per_page=8)
     return render_template('admin/view_products.html', products=products)
-
-
-@views.route('/admin/')
-def dashboard():
-    orders=Order.query.all()
-    products=Product.query.all()
-    return render_template('admin/dashboard.html', orders=len(orders), products=len(products))
-
 
 
 @views.route('/orders/')
@@ -277,10 +266,10 @@ def view_orders():
 
 @views.route('/users', methods=['GET', 'POST'])
 @login_required
-@role_required('Admin')
+# @role_required('Admin')
 def admin_users():
     page = request.args.get('page', 1, type=int)
-    users = User.query.paginate(page=page, per_page=4)
+    users = User.query.paginate(page=page, per_page=8)
     return render_template('admin/staff.html',users=users)
 
 @views.route('/edit/users/<int:userid>', methods=['GET', 'POST'])
@@ -294,10 +283,31 @@ def edit_user(userid):
     return render_template('admin/edit_user.html', form=form)
 
 
-    # response={
-    #     "userid": user.userid,
-    #     "username": user.email
-        
-    # }
-    # return jsonify(response)
+
+@views.route('/admin/')
+def dashboard():
+    orders=Order.query.all()
+    products=Product.query.all()
+
+    dates=[]
+    total_sales=0
+    num_orders=[]
+    
+    for order in orders:
+        total_sales+=order.total_price
+        date=order.order_date
+        dates.append(date.strftime("%d-%m-%y"))
+    dates=set(dates)
+    dates=list(dates)
+    dates.sort(key = lambda date: datetime.strptime(date, "%d-%m-%y"))
+    for  date in dates:
+        count=0
+        for order in orders:
+            if order.order_date.strftime("%d-%m-%y")==date:
+                count+=1
+        num_orders.append(count)
+    print(dates)
+    return render_template('admin/dashboard.html', orders=len(orders), products=len(products),total_sales=total_sales, num_orders=num_orders, dates=dates)
+
+
 
