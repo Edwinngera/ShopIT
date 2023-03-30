@@ -157,6 +157,7 @@ def place_order():
 
 # Admin
 
+@login_required
 @views.route('/add-product', methods=['POST', 'GET'])
 def add_product():
     app = create_app()
@@ -191,6 +192,7 @@ def add_product():
     return render_template('admin/add_products.html', form=form)
 
 
+@login_required
 @views.route('/product/<int:productid>/edit', methods=['GET'])
 def edit_product(productid):
     form = uploadProduct()
@@ -208,6 +210,7 @@ def edit_product(productid):
     return render_template('admin/edit_product.html', form=form)
 
 
+@login_required
 @views.route('/product/<int:productid>/edit', methods=['POST'])
 def edit_product_submission(productid):
     form = uploadProduct()
@@ -244,16 +247,15 @@ def delete_product(productid):
         product = Product.query.get(productid)
         db.session.delete(product)
         db.session.commit()
-        return jsonify({
-            'success': True,
-            'deleted': productid
-        })
+        return  redirect(url_for('views.view'))
+      
 
     except Exception as e:
         abort(422)
 
     return redirect()
 
+@login_required
 @views.route('/view_order', methods=['GET', 'POST'])
 def view_orders():
     order_reponse=[]
@@ -272,6 +274,7 @@ def admin_users():
     users = User.query.paginate(page=page, per_page=8)
     return render_template('admin/staff.html',users=users)
 
+@login_required
 @views.route('/edit/users/<int:userid>', methods=['GET', 'POST'])
 def edit_user(userid):
     user=User.query.get(userid)
@@ -283,7 +286,7 @@ def edit_user(userid):
     return render_template('admin/edit_user.html', form=form)
 
 
-
+@login_required
 @views.route('/admin/')
 def dashboard():
     orders=Order.query.all()

@@ -27,8 +27,12 @@
                             <ul class="dropdown-content">
                                 <li><a href="#">My Account</a></li>
                                 <li><a href="#">Orders</a></li>
-                                <li><a href="#">Login</a></li>
+                                {% if current_user.is_authenticated %}
                                 <li><a href="{{url_for('auth.logout')}}">Logut</a></li>
+                                {%else %}
+                                <li><a href="#">Login</a></li>
+                                {% endif %}
+
                             </ul>
                         </li>
                     </ul>
