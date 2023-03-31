@@ -1,10 +1,10 @@
 from flask import Flask, render_template, redirect, request, flash, url_for, jsonify, Blueprint, abort, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, current_user
-from .forms import uploadProduct, CheckoutForm,EditUserForm
+from .forms import uploadProduct, CheckoutForm,EditUserForm, RoleForm
 import os
 from werkzeug.utils import secure_filename
-from .models import Product, Order,User
+from .models import Product, Order,User,Role
 from . import db
 from . import create_app
 from .auth import role_required
@@ -275,7 +275,7 @@ def admin_users():
     return render_template('admin/staff.html',users=users)
 
 @login_required
-@views.route('/edit/users/<int:userid>', methods=['GET', 'POST'])
+@views.route('/edit/users/<int:userid>', methods=['GET'])
 def edit_user(userid):
     user=User.query.get(userid)
     form = EditUserForm(
@@ -284,6 +284,31 @@ def edit_user(userid):
         email=user.email,
     )
     return render_template('admin/edit_user.html', form=form)
+
+@login_required
+@views.route('/edit/users/<int:userid>', methods=['POST'])
+def edit_user_submission(userid):
+    form = EditUserForm()
+    if form.validate():
+        try:
+            user = User.query.get(userid)
+            print(user)
+            user.email = form.email.data
+            user.fname=form.name.data
+            # user.role = form.role.data
+            print(user.role)
+            db.session.add(user)
+            db.session.commit()
+            print("Done!")
+            flash("User updated successfully")
+        except Exception as e:
+            print(e)
+            db.session.rollback()
+            flash("User not updated successfully")
+        finally:
+            db.session.close()
+    return redirect(url_for('views.admin_users'))
+
 
 
 @login_required
@@ -310,7 +335,26 @@ def dashboard():
                 count+=1
         num_orders.append(count)
     print(dates)
-    return render_template('admin/dashboard.html', orders=len(orders), products=len(products),total_sales=total_sales, num_orders=num_orders, dates=dates)
+    return render_template('admin/dashboard.html', orders=len(orders), products=len(products),total_sales=int(total_sales), num_orders=num_orders, dates=dates)
+
+@login_required
+@views.route("/add_role")
+def add_role():
+    form=RoleForm()
+    if form.validate():
+        name=request.form.get('role')
+        role=Role(name=role)
+        db.session.add(role)
+        db.session.commit()
+    else:
+        pass
+
+
+
+        
+
+
+
 
 
 

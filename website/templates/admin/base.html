@@ -19,7 +19,7 @@
 
     <div class="sidebar">
         <div class="logo">
-            <a href="index.html"><img src="/static/images/new_logo.png" width="125px" height="125px"></a>
+            <a href="{{url_for('views.dashboard')}}"><img src="/static/images/new_logo.png" width="125px" height="125px"></a>
         </div>
         <a class="{% if request.path == url_for('views.dashboard') %}active{% endif %}"
             href="{{url_for('views.dashboard')}}">
@@ -63,7 +63,7 @@
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
                         <li><a class="dropdown-item" href="#">My Account</a></li>
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                        <li><a class="dropdown-item" href="{{url_for('auth.logout')}}">Logout</a></li>
                     </ul>
                 </li>
 

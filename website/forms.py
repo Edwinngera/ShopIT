@@ -49,6 +49,10 @@ class EditUserForm(FlaskForm):
     email=StringField('Email', validators=[DataRequired()])
     role=SelectField('Role', validators=[DataRequired()],choices=[('Admin', 'Admin'),('User', 'User')])
 
+class RoleForm(FlaskForm):
+     role=SelectField('Role', validators=[DataRequired()],choices=[('Admin', 'Admin'),('User', 'User')])
+
+
 
 
 
